@@ -1,4 +1,4 @@
-screen ./tcpsrv
+screen ./tcpcli
 ifconfig tcptnl up
 
 sysctl net.ipv4.ip_forward=1
