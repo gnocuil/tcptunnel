@@ -79,10 +79,19 @@ int handle_socket(int fd, char *buf)
     int count = read(fd, &x, sizeof(x));
     printf("received cnt=%d x=%d\n", count, x);
     if (count <= 0) return count;
-    count = read(fd, buf, (int)x);
-    if (count != (int)x)
-        fprintf(stderr, "handle_socket: read %d, but want %d\n", count, (int)x);
-    return count;
+    int rem = (int)x;
+    int delta = 0;
+    do {
+        count = read(fd, buf + delta, rem);
+        if (count <= 0) {
+            fprintf(stderr, "handle_socket: count=0 while reading packet\n");
+            return count;
+        }
+        delta += count;
+        rem -= count;
+//            fprintf(stderr, "handle_socket: read %d, but want %d\n", count, (int)x);
+    } while (rem > 0);
+    return delta;
 }
 
 int socket_send(int fd, char* buf, int len)
