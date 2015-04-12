@@ -77,7 +77,7 @@ int handle_socket(int fd, char *buf)
 {
     uint16_t x;
     int count = read(fd, &x, sizeof(x));
-    printf("received cnt=%d x=%d\n", count, x);
+    //printf("received cnt=%d x=%d\n", count, x);
     if (count <= 0) return count;
     int rem = (int)x;
     int delta = 0;

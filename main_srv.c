@@ -73,7 +73,7 @@ int main(int argc, char **argv)
             handle_s2c();
             continue;
         }
-        printf("c2s socket read...");
+        //printf("c2s socket read...");
         /*
         for (i = 0; i < fdlist_c2s_len; ++i) {
             int fd = fdlist_c2s[i];
