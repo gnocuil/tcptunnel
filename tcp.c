@@ -11,6 +11,15 @@ int fd_s2c;
 
 struct in_addr addr_remote;
 
+//int fdlist_s2c[LIST_MAX];
+//int fdlist_c2s[LIST_MAX];
+//int fdlist_s2c_len;
+//int fdlist_c2s_len;
+
+int fd_data_c2s;
+int fd_data_s2c;
+
+
 static int init_fd(uint16_t port)
 {
     int fd;
@@ -37,6 +46,7 @@ static int init_fd(uint16_t port)
         perror("error in listen()");
         exit(0);
     }
+    return fd;
 }
 
 void tcpsrv_init()
@@ -44,6 +54,32 @@ void tcpsrv_init()
     fd_c2s = init_fd(PORT_C2S);
     fd_s2c = init_fd(PORT_S2C);
 }
+
+void handle_c2s()
+{
+    int fd = accept(fd_c2s, NULL, NULL);
+//    if (fdlist_c2s_len < LIST_MAX) {
+//        fdlist_c2s[fdlist_c2s_len++] = fd;
+//    }
+    fd_data_c2s = fd;
+}
+
+void handle_s2c()
+{
+    int fd = accept(fd_s2c, NULL, NULL);
+//    if (fdlist_s2c_len < LIST_MAX) {
+//        fdlist_s2c[fdlist_s2c_len++] = fd;
+//    }
+    fd_data_s2c = fd;
+}
+
+void handle_socket(int fd)
+{
+    int x;
+    int count = read(fd, &x, sizeof(x));
+    printf("received x=%d\n", x);
+}
+
 
 static int connect_fd(uint16_t port)
 {
@@ -67,5 +103,9 @@ static int connect_fd(uint16_t port)
 void tcpcli_init()
 {
     fd_c2s = connect_fd(PORT_C2S);
+    //test
+    int x;
+    x = 484848;
+    write(fd_c2s, &x, sizeof(x));
 }
 

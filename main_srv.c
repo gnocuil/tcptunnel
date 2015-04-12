@@ -27,7 +27,18 @@ int main(int argc, char **argv)
 	    int maxsock = fd_c2s;
 	    if (fd_s2c > maxsock)
 		    maxsock = fd_s2c;
-        
+		/*
+		int i;
+		for (i = 0; i < fdlist_c2s_len; ++i) {
+		    int fd = fdlist_c2s[i];
+		    if (fd > maxsock)
+		        maxsock = fd;
+		    FD_SET(fd, &set);
+		}*/
+		FD_SET(fd_data_c2s, &set);
+		if (fd_data_c2s > maxsock)
+		    maxsock = fd_data_c2s;
+		    
         int ret = select(maxsock + 1, &set, NULL, NULL, NULL);
 		if (ret < 0) {
 			fprintf(stderr, "main: Error in select: %m\n");
@@ -35,11 +46,23 @@ int main(int argc, char **argv)
 		}
 		if (FD_ISSET(fd_c2s, &set)) {
 			printf("connect c2s\n");
-			break;
+			handle_c2s();
+			continue;
 		}
 		if (FD_ISSET(fd_s2c, &set)) {
 			printf("connect s2c\n");
-			break;
+			handle_s2c();
+			continue;
 		}
+		printf("c2s socket read...");
+		/*
+		for (i = 0; i < fdlist_c2s_len; ++i) {
+		    int fd = fdlist_c2s[i];
+		    if (FD_ISSET(fd, &set)) {
+		        handle_socket(fd);
+		        break;
+		    }
+		}*/
+		handle_socket(fd_data_c2s);
     }
 }
