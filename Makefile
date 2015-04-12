@@ -1,14 +1,14 @@
-CC     := g++
-CFLAGS := -O2 -std=c++0x
-TARGET := tunnel
-OBJS   := main.o tun.o network.o socket.o 
+CC     := gcc
+CFLAGS := -O2
+TARGET := tcpsrv
+OBJS   := main_srv.o
 
 all: $(TARGET)
 
 $(TARGET) : $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
 
-%.o: %.cpp
+%.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 	
 clean :
