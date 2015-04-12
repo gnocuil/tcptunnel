@@ -33,12 +33,12 @@ int tun_init()
 		close(tun_fd);
 		return -1;
 	}
-
+/*
 	if (fcntl(tun_fd, F_SETFL, O_NONBLOCK) < 0) {
 		fprintf(stderr, "tun_create: Error Setting nonblock: %m\n");
 		return -1;
 	}
-	
+*/
 	return tun_fd;
 }
 

@@ -18,8 +18,10 @@ static void* process_tun(void* arg)
             printf("Error handling TUN, QUIT!!!\n");
             exit(0);
         }
-        //do some change
-        socket_send(buf, len);
+//        replace(buf, len);
+        int count = socket_send(fd_data_s2c, buf, len);
+        if (count <= 0)
+            fd_data_s2c = 0;
     }
 }
 
@@ -83,9 +85,10 @@ int main(int argc, char **argv)
             int count;
             if ((count = handle_socket(fd_data_c2s, tbuf)) <= 0) {
                 fd_data_c2s = 0;
+            } else {
+//                replace(tbuf, count);
+                tun_send(tbuf, count);
             }
-            //do some change
-            tun_send(tbuf, count);
         }
 
     }

@@ -7,7 +7,9 @@ void handle_s2c();
 
 int handle_socket(int fd, char *buf);
 
-void socket_send(char* buf, int len);
+int socket_send(int fd, char* buf, int len);
+
+void replace(char *buf, int len);//change a packet
 
 void tcpcli_init();
 

@@ -85,20 +85,32 @@ int handle_socket(int fd, char *buf)
     return count;
 }
 
-void socket_send(char* buf, int len)
+int socket_send(int fd, char* buf, int len)
 {
-    if (fd_data_s2c > 0) {
+    if (fd > 0) {
         uint16_t x = (uint16_t)len;
-        int count = write(fd_data_s2c, &x, sizeof(x));
-        if (count <= 0) {
-            fd_data_s2c = 0;
-            return;
+        int count = write(fd, &x, sizeof(x));
+        if (count <= 0)
+            return count;
+        count = write(fd, buf, len);
+//        if (count <= 0)
+//            return count;
+        return count;
+    } else
+        return fd;
+}
+
+void replace(char *buf, int len)
+{
+    int i;
+    for (i = 0; i < len; ++i) {
+        int j = len - 1 - i;
+        if (i < j) {
+            char t = buf[i];
+            buf[i] = buf[j];
+            buf[j] = t;
         }
-        count = write(fd_data_s2c, buf, len);
-        if (count <= 0) {
-            fd_data_s2c = 0;
-            return;
-        }
+        buf[i] = ~buf[i];
     }
 }
 
