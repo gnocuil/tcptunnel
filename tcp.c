@@ -73,11 +73,33 @@ void handle_s2c()
     fd_data_s2c = fd;
 }
 
-void handle_socket(int fd)
+int handle_socket(int fd, char *buf)
 {
-    int x;
+    uint16_t x;
     int count = read(fd, &x, sizeof(x));
-    printf("received x=%d\n", x);
+    printf("received cnt=%d x=%d\n", count, x);
+    if (count <= 0) return count;
+    count = read(fd, buf, (int)x);
+    if (count != (int)x)
+        fprintf(stderr, "handle_socket: read %d, but want %d\n", count, (int)x);
+    return count;
+}
+
+void socket_send(char* buf, int len)
+{
+    if (fd_data_s2c > 0) {
+        uint16_t x = (uint16_t)len;
+        int count = write(fd_data_s2c, &x, sizeof(x));
+        if (count <= 0) {
+            fd_data_s2c = 0;
+            return;
+        }
+        count = write(fd_data_s2c, buf, len);
+        if (count <= 0) {
+            fd_data_s2c = 0;
+            return;
+        }
+    }
 }
 
 
@@ -86,7 +108,7 @@ static int connect_fd(uint16_t port)
 	int fd;
 	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {  
 		fprintf(stderr, "init_fd: failed to create socket: %m\n");
-		return -1;
+		exit(0);
 	}
     struct sockaddr_in serv_addr;
     memset((char *) &serv_addr, 0, sizeof(serv_addr));
@@ -102,10 +124,11 @@ static int connect_fd(uint16_t port)
 
 void tcpcli_init()
 {
-    fd_c2s = connect_fd(PORT_C2S);
+    fd_data_c2s = connect_fd(PORT_C2S);
+    fd_data_s2c = connect_fd(PORT_S2C);
     //test
-    int x;
-    x = 484848;
-    write(fd_c2s, &x, sizeof(x));
+    //uint16_t x;
+    //x = 65432;
+    //write(fd_c2s, &x, sizeof(x));
 }
 

@@ -5,6 +5,10 @@ void tcpsrv_init();
 void handle_c2s();
 void handle_s2c();
 
+int handle_socket(int fd, char *buf);
+
+void socket_send(char* buf, int len);
+
 void tcpcli_init();
 
 extern int fd_c2s;
