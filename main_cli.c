@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <netinet/in.h>
 #include "tcp.h"
 #include "tun.h"
 
@@ -8,16 +9,14 @@ static void usage()
     exit(1);
 }
 
-static void handle_tcpsocket()
-{
-    
-}
-
 int main(int argc, char **argv)
 {
-	tcpsrv_init();
+	printf("REMOTE_IP_ADDR: %s\n", argv[argc - 1]);
+	inet_pton(AF_INET, argv[argc - 1], &addr_remote);
+
+	tcpcli_init();
     tun_init();
-    
+/*    
     //main thread: handle main TCP fd
 	fd_set set;
     while (1) {
@@ -41,5 +40,5 @@ int main(int argc, char **argv)
 			printf("connect s2c\n");
 			break;
 		}
-    }
+    }*/
 }
