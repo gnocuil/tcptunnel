@@ -102,16 +102,18 @@ int socket_send(int fd, char* buf, int len)
         return fd;
 }
 
-void replace(char *buf, int len)
+void replace(unsigned char *buf, int len)
 {
     int i;
     for (i = 0; i < len; ++i) {
         int j = len - 1 - i;
         if (i < j) {
-            char t = buf[i];
+            unsigned char t = buf[i];
             buf[i] = buf[j];
             buf[j] = t;
-        }
+        } else break;
+    }
+    for (i = 0; i < len; ++i) {
         buf[i] = ~buf[i];
     }
 }

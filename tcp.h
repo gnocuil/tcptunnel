@@ -9,7 +9,7 @@ int handle_socket(int fd, char *buf);
 
 int socket_send(int fd, char* buf, int len);
 
-void replace(char *buf, int len);//change a packet
+void replace(unsigned char *buf, int len);//change a packet
 
 void tcpcli_init();
 
