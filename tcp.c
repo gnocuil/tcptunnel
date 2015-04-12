@@ -89,10 +89,12 @@ int socket_send(int fd, char* buf, int len)
 {
     if (fd > 0) {
         uint16_t x = (uint16_t)len;
-        int count = write(fd, &x, sizeof(x));
+        memcpy(buf - 2, &x, 2);
+        int count;
+/*        count = write(fd, &x, sizeof(x));
         if (count <= 0)
-            return count;
-        count = write(fd, buf, len);
+            return count;*/
+        count = write(fd, buf - 2, len + 2);
 //        if (count <= 0)
 //            return count;
         return count;

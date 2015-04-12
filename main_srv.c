@@ -11,14 +11,15 @@ static void usage()
 static void* process_tun(void* arg)
 {
     printf("process_tun!!!\n");
-    char buf[4000];
+    char _buf[4002];
+    char *buf = _buf + 2;
     while (1) {
         int len = handle_tun(buf, 4000);
         if (len <= 0) {
             printf("Error handling TUN, QUIT!!!\n");
             exit(0);
         }
-//        replace(buf, len);
+        replace(buf, len);
         int count = socket_send(fd_data_s2c, buf, len);
         if (count <= 0)
             fd_data_s2c = 0;
@@ -86,7 +87,7 @@ int main(int argc, char **argv)
             if ((count = handle_socket(fd_data_c2s, tbuf)) <= 0) {
                 fd_data_c2s = 0;
             } else {
-//                replace(tbuf, count);
+                replace(tbuf, count);
                 tun_send(tbuf, count);
             }
         }
